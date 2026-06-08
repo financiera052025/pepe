@@ -545,11 +545,74 @@ def _crear_tabla_consolidada_m3(doc, datos_años):
 
 # --- INTERFAZ DE USUARIO (STREAMLIT) ---
 st.markdown("---")
-modulo_seleccionado = st.radio(
-    "Selecciona el Módulo de Procesamiento:",
-    ("Módulo 1: Detección Automática Dinámica", 
-     "Módulo 2: Detección Automática Dinámica", 
-     "Módulo 3: Detección Automática Dinámica")
+st.subheader("Selecciona el Módulo de Procesamiento:")
+
+# Creamos 3 columnas para poner las imágenes y las casillas una al lado de la otra
+col1, col2, col3 = st.columns(3)
+
+with col1:
+    # Puedes cambiar esta URL por el enlace de tu propia imagen
+    st.image("https://cdn-icons-png.flaticon.com/512/1055/1055644.png", width=80) 
+    mod1 = st.checkbox("Módulo 1: Detección Básica (Patrones V18760494)")
+
+with col2:
+    st.image("https://cdn-icons-png.flaticon.com/512/2040/2040504.png", width=80) 
+    mod2 = st.checkbox("Módulo 2: Automática Dinámica")
+
+with col3:
+    st.image("https://cdn-icons-png.flaticon.com/512/2621/2621040.png", width=80) 
+    mod3 = st.checkbox("Módulo 3: Integral por Años")
+
+# Validamos que el usuario seleccione solo UNA casilla a la vez
+casillas_seleccionadas = sum([mod1, mod2, mod3])
+
+if casillas_seleccionadas > 1:
+    st.warning("⚠️ Por favor, selecciona **solo un** módulo a la vez para evitar conflictos.")
+    procesamiento_permitido = False
+elif casillas_seleccionadas == 0:
+    st.info("👆 Selecciona al menos un módulo arriba para continuar.")
+    procesamiento_permitido = False
+else:
+    procesamiento_permitido = True
+
+st.markdown("---")
+archivo_subido = st.file_uploader("Sube tu archivo Word (.docx)", type=["docx"])
+
+# Botón de procesamiento
+if st.button("Procesar Archivo", type="primary"):
+    if not procesamiento_permitido:
+        st.error("Revisa la selección del módulo antes de procesar.")
+    elif archivo_subido is None:
+        st.warning("Por favor, sube un archivo Word antes de procesar.")
+    else:
+        try:
+            with st.spinner("Analizando documento..."):
+                # Ejecutamos la lógica según la casilla marcada
+                if mod1:
+                    doc_final, titular_id = procesar_modulo1(archivo_subido)
+                    sufijo = "Basico"
+                elif mod2:
+                    doc_final, titular_id = procesar_modulo2(archivo_subido)
+                    sufijo = "Dinamico"
+                elif mod3:
+                    doc_final, titular_id = procesar_modulo3(archivo_subido)
+                    sufijo = "Completo"
+
+                # Guardar en memoria para descarga
+                buffer_salida = io.BytesIO()
+                doc_final.save(buffer_salida)
+                buffer_salida.seek(0)
+                nombre_archivo_salida = f"Analisis_Financiero_{sufijo}_{titular_id}.docx"
+
+            st.success("¡Documento procesado con éxito! 🎉")
+            st.download_button(
+                label="📥 Descargar Reporte Generado",
+                data=buffer_salida,
+                file_name=nombre_archivo_salida,
+                mime="application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+            )
+        except Exception as e:
+            st.error(f"Ocurrió un error al procesar el archivo: {e}")
 )
 
 archivo_subido = st.file_uploader("Sube tu archivo Word (.docx)", type=["docx"])
