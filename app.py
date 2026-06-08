@@ -9,8 +9,8 @@ from docx.enum.text import WD_ALIGN_PARAGRAPH
 
 # Configuración de la página web
 st.set_page_config(page_title="Analizador Financiero", layout="centered")
-st.title("📊 Analizador de Instrumentos Financieros")
-st.write("Sube tu documento Word y selecciona el módulo de procesamiento que deseas aplicar.")
+st.title("INSTRUMENTOS FINANCIEROS")
+st.write("Selecciona el módulo de procesamiento que deseas aplicar.")
 
 # Diccionario Global
 DICCIONARIO_BANCOS = {
@@ -547,9 +547,9 @@ def _crear_tabla_consolidada_m3(doc, datos_años):
 st.markdown("---")
 modulo_seleccionado = st.radio(
     "Selecciona el Módulo de Procesamiento:",
-    ("Módulo 1: Detección Básica (Patrones V18760494)", 
+    ("Módulo 1: Detección Automática Dinámica", 
      "Módulo 2: Detección Automática Dinámica", 
-     "Módulo 3: Procesamiento Integral por Años")
+     "Módulo 3: Detección Automática Dinámica")
 )
 
 archivo_subido = st.file_uploader("Sube tu archivo Word (.docx)", type=["docx"])
