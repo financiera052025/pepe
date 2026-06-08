@@ -9,7 +9,7 @@ from docx.enum.text import WD_ALIGN_PARAGRAPH
 
 # Configuración de la página web
 st.set_page_config(page_title="Analizador Financiero", layout="centered")
-st.title("INSTRUMENTOS FINANCIEROS"),layout="centered")
+st.title("INSTRUMENTOS FINANCIEROS"), layout="centered")
 st.write("Selecciona el módulo de procesamiento que deseas aplicar.")
 
 # Diccionario Global
