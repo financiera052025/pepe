@@ -35,6 +35,7 @@ def limpiar_monto_venezuela(monto_str):
     if not monto_str:
         return 0.0
     m_limpio = str(monto_str).replace('"', '').replace(' ', '').strip()
+    
     # Lógica avanzada del módulo 3 para mayor compatibilidad
     if ',' in m_limpio and '.' in m_limpio:
         if m_limpio.rfind(',') > m_limpio.rfind('.'): 
@@ -556,12 +557,12 @@ with col1:
     mod1 = st.checkbox("Módulo 1: Detección Básica")
 
 with col2:
-   st.image("foto2.png", width=80) 
-    mod2 = st.checkbox("Módulo 2: Detección Básica")
+    st.image("foto2.png", width=80) 
+    mod2 = st.checkbox("Módulo 2: Automática Dinámica")
 
 with col3:
     st.image("foto3.png", width=80) 
-    mod3 = st.checkbox("Módulo 3: Detección Básica")
+    mod3 = st.checkbox("Módulo 3: Integral por Años")
 
 # Validamos que el usuario seleccione solo UNA casilla a la vez
 casillas_seleccionadas = sum([mod1, mod2, mod3])
@@ -613,39 +614,3 @@ if st.button("Procesar Archivo", type="primary"):
             )
         except Exception as e:
             st.error(f"Ocurrió un error al procesar el archivo: {e}")
-)
-
-archivo_subido = st.file_uploader("Sube tu archivo Word (.docx)", type=["docx"])
-
-if st.button("Procesar Archivo"):
-    if archivo_subido is not None:
-        try:
-            with st.spinner("Analizando documento..."):
-                # Se decide qué lógica aplicar basado en la selección
-                if "Módulo 1" in modulo_seleccionado:
-                    doc_final, titular_id = procesar_modulo1(archivo_subido)
-                    sufijo = "Basico"
-                elif "Módulo 2" in modulo_seleccionado:
-                    doc_final, titular_id = procesar_modulo2(archivo_subido)
-                    sufijo = "Dinamico"
-                else:
-                    doc_final, titular_id = procesar_modulo3(archivo_subido)
-                    sufijo = "Completo"
-
-                # Guardar en memoria (buffer) para descarga
-                buffer_salida = io.BytesIO()
-                doc_final.save(buffer_salida)
-                buffer_salida.seek(0)
-                nombre_archivo_salida = f"Analisis_Financiero_{sufijo}_{titular_id}.docx"
-
-            st.success("¡Documento procesado con éxito!")
-            st.download_button(
-                label="📥 Descargar Reporte Generado",
-                data=buffer_salida,
-                file_name=nombre_archivo_salida,
-                mime="application/vnd.openxmlformats-officedocument.wordprocessingml.document"
-            )
-        except Exception as e:
-            st.error(f"Ocurrió un error al procesar el archivo: {e}")
-    else:
-        st.warning("Por favor, sube un archivo Word antes de procesar.")
