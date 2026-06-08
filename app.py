@@ -553,15 +553,15 @@ col1, col2, col3 = st.columns(3)
 
 with col1:
     # Puedes cambiar esta URL por el enlace de tu propia imagen
-    st.image("foto1.png", width=180) 
+    st.image("foto1.png", width=210) 
     mod1 = st.checkbox("Módulo 1: Detección Básica")
 
 with col2:
-    st.image("foto2.png", width=180) 
+    st.image("foto2.png", width=210) 
     mod2 = st.checkbox("Módulo 2: Automática Dinámica")
 
 with col3:
-    st.image("foto3.png", width=180) 
+    st.image("foto3.png", width=210) 
     mod3 = st.checkbox("Módulo 3: Integral por Años")
 
 # Validamos que el usuario seleccione solo UNA casilla a la vez
